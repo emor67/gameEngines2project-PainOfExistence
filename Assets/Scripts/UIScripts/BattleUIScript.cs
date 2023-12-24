@@ -11,6 +11,9 @@ public class BattleUIScript : MonoBehaviour
     //2 is lose
     public int winCondition = 0;
 
+    public int currentTurnNumber = 1;
+    public int nextTurnNumber = 2;
+
     public Canvas BattleCanvas;
 
     public int dice1;
@@ -19,6 +22,8 @@ public class BattleUIScript : MonoBehaviour
 
     public int enemy1;
     public int enemy2;
+
+    public TMP_Text turnNumberText;
 
     public TMP_Text button1Text;
     public TMP_Text button2Text;
@@ -46,44 +51,113 @@ public class BattleUIScript : MonoBehaviour
 
     void Start()
     {
-        dice1 = Random.Range(1, 7);
-        dice2 = Random.Range(1, 7);
-        dice3 = Random.Range(1, 7);
+        DiceRandomizer();
 
+        UpdateText();
+
+        EnemyHealthRandomizer();
+    }
+
+    void Update()
+    {
+        BattleSequence();
+
+        UpdateHealth();
+
+        TurnTracker();
+    }
+
+    private void TurnTracker()
+    {
+        if(currentTurnNumber == nextTurnNumber)
+        {
+            DiceRandomizer();
+            UpdateText();
+            ButtonReaktivator();
+
+            nextTurnNumber++;
+        }
+    }
+
+    private void ButtonReaktivator()
+    {
+        button1.interactable = true;
+        button2.interactable = true;
+        button3.interactable = true;
+
+        enemyB1.interactable = true;
+        enemyB2.interactable = true;
+    }
+
+    public void BattleSequence()
+    {
+        if (winCondition == 0)
+        {
+            //something will be happen here maybe
+        }
+        else if (winCondition == 1)
+        {
+            //win screen
+            Debug.Log("Win!");
+            BattleCanvas.enabled = false;
+            
+            StartCoroutine(WaitForOneSecond());
+
+            winCondition = 0;
+        }
+        else if(winCondition == 2)
+        {
+            //lose screen
+            Debug.Log("Lose");
+            BattleCanvas.enabled = false;
+           
+            StartCoroutine(WaitForOneSecond());
+
+            winCondition = 0;
+        }
+    }
+
+
+    private void UpdateHealth()
+    {
+        playerHealthText.text = "Your HP: " + playerHealth;
+        enemyHealthText.text = "Enemy HP: " + enemyHealth;
+    }
+
+    private void EnemyHealthRandomizer()
+    {
+        enemyHealth = Random.Range(23,36);
+    }
+
+    private void UpdateText()
+    {
         button1Text.text = dice1.ToString();
         button2Text.text = dice2.ToString();
         button3Text.text = dice3.ToString();
 
-        enemy1 = Random.Range(1, 7);
-        enemy2 = Random.Range(1, 7);
-
         enemy1Text.text = enemy1.ToString();
         enemy2Text.text = enemy2.ToString();
+
+        turnNumberText.text = "Turn " + currentTurnNumber;
     }
 
-
-    void Update()
+    private void DiceRandomizer()
     {
-        //BattleSequence();
+        dice1 = Random.Range(1, 7);
+        dice2 = Random.Range(1, 7);
+        dice3 = Random.Range(1, 7);
 
-        playerHealthText.text = playerHealth.ToString();
-        enemyHealthText.text = enemyHealth.ToString();
+        enemy1 = Random.Range(1, 7);
+        enemy2 = Random.Range(1, 7);
     }
-   
-    
-    /*public void BattleSequence()
-    {
-        if (winCondition == 1)
-        {
-            
-        }else if (winCondition == 2)
-        {
-            
-        }else if(winCondition == 0)
-        {
 
-        }
-    }*/
+ 
+
+    IEnumerator WaitForOneSecond()
+    {
+        yield return new WaitForSeconds(1f);
+    }
+
 
     #region Battle Buttons
     public void Button1()
@@ -107,49 +181,61 @@ public class BattleUIScript : MonoBehaviour
     public void HealButton()
     {
         playerHealth += damage;
+        damage = 0;
     }
-    public void EndBattleButton()
+    public void NextTurnButton()
     {
         playerHealth -= enemy1 + enemy2;
         enemyHealth -= dice1 + dice2 + dice3;
 
         if (enemyHealth <= 0)
         {
-            Debug.Log("Win");
-        }else if (playerHealth <= 0)
+            winCondition = 1;
+        }
+        else if (playerHealth <= 0)
         {
-            Debug.Log("Lose");
-        }else { /*close battle continue*/}
+            winCondition = 2;
+        }
 
-        BattleCanvas.enabled = false;
+        StartCoroutine(WaitForOneSecond());
+
+        currentTurnNumber++;
     }
 
     public void Enemy1()
     {
         enemy1 -= damage;
+
+        UpdateText();
+
         damage = 0;
-        if(enemy1 < 0)
+        
+        if(enemy1 <= 0)
         {
             enemyHealth += enemy1;
             enemy1 = 0;
-        }
-        if (enemy1 <= 0)
-        {
+            
+            UpdateText();
+            
             enemyB1.interactable = false;
         }
     }
     public void Enemy2()
     {
         enemy2 -= damage;
+        
+        UpdateText();
+
         damage = 0;
-        if (enemy2 < 0)
+        
+        if (enemy2 <= 0)
         {
             enemyHealth += enemy2;
             enemy2 = 0;
-        }
-        if (enemy2 <= 0) 
-        { 
-            enemyB2.interactable = false; 
+            
+            UpdateText();
+            
+            enemyB2.interactable = false;
         }
     }
     #endregion 
