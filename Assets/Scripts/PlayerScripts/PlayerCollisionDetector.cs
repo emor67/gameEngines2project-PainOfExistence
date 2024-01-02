@@ -7,6 +7,7 @@ public class PlayerCollisionDetector : MonoBehaviour
     public PlayerMovement playerMovement;
 
     public Canvas BattleCanvas;
+    public Canvas ChatCanvas;
 
     private void Start()
     {
@@ -26,6 +27,11 @@ public class PlayerCollisionDetector : MonoBehaviour
         if (collision.gameObject.CompareTag("BattlePoint"))
         {
             BattleCanvas.enabled = true;
+        }
+
+        if (collision.gameObject.CompareTag("Person"))
+        {
+            ChatCanvas.enabled = true;
         }
     }
 }
