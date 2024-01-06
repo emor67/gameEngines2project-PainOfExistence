@@ -12,11 +12,12 @@ public class PlayerCollisionDetector : MonoBehaviour
     private void Start()
     {
         BattleCanvas.enabled = false;
+        ChatCanvas.enabled = false;
     }
 
     private void Update()
     {
-        if (BattleCanvas.enabled == true) 
+        if (BattleCanvas.enabled == true || ChatCanvas.enabled == true) 
         { 
             playerMovement.moveSpeed = 0;
         }
