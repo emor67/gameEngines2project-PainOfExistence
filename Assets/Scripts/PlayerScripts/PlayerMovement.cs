@@ -6,11 +6,13 @@ public class PlayerMovement : MonoBehaviour
 {
     public float moveSpeed = 5f;
 
-    private Rigidbody2D rb;
+    private Rigidbody2D _rb;
+    private Animator _animator;
 
     private void Start()
     {
-        rb = GetComponent<Rigidbody2D>();
+        _rb = GetComponent<Rigidbody2D>();
+        _animator = GetComponent<Animator>();
     }
 
     private void Update()
@@ -27,6 +29,30 @@ public class PlayerMovement : MonoBehaviour
 
         movement.Normalize();
 
-        rb.velocity = new Vector2(movement.x * moveSpeed, movement.y * moveSpeed);
+        _rb.velocity = new Vector2(movement.x * moveSpeed, movement.y * moveSpeed);
+
+        FlipCharacter(horizontal);
+
+        if (Mathf.Abs(horizontal) > 0 || Mathf.Abs(vertical) > 0)
+        {
+            _animator.SetBool("IsWalking", true);
+        }
+        else
+        {
+            _animator.SetBool("IsWalking", false);
+        }
+    }
+
+    void FlipCharacter(float horizontalInput)
+    {
+        if (horizontalInput < 0) // Moving left
+        {
+            transform.localScale = new Vector3(0.75f, 0.75f, 1);
+        }
+        else if (horizontalInput > 0) // Moving right
+        {
+            transform.localScale = new Vector3(-0.75f, 0.75f, 1);
+        }
+        // If horizontalInput is 0, you may want to keep the current facing direction.
     }
 }

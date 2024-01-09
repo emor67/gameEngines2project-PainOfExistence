@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerCollisionDetector : MonoBehaviour
 {
@@ -33,6 +34,16 @@ public class PlayerCollisionDetector : MonoBehaviour
         if (collision.gameObject.CompareTag("Person"))
         {
             ChatCanvas.enabled = true;
+        }
+
+        if (collision.gameObject.CompareTag("ExitHome"))
+        {
+            SceneManager.LoadScene("GameplayScene");
+        }
+
+        if (collision.gameObject.CompareTag("EnterHome"))
+        {
+            SceneManager.LoadScene("HomeScene");
         }
     }
 }
