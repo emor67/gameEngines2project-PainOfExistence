@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class PlayerCollisionDetector : MonoBehaviour
 {
+    public ChatScript ChatScript;
     public PlayerMovement playerMovement;
 
     public Canvas BattleCanvas;
@@ -23,22 +24,45 @@ public class PlayerCollisionDetector : MonoBehaviour
             playerMovement.moveSpeed = 0;
         }
         else { playerMovement.moveSpeed = 5; }    
+
+        if(ChatScript.buttonClickCount == 2)
+        {
+            ChatCanvas.enabled = false;
+
+            ChatScript.buttonClickCount = 0;
+        }
     }
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.CompareTag("BattlePoint"))
         {
             BattleCanvas.enabled = true;
+            Destroy(collision.gameObject);
         }
 
-        if (collision.gameObject.CompareTag("Person"))
+        if (collision.gameObject.CompareTag("Dad"))
         {
+            ChatScript.DadChatController();
             ChatCanvas.enabled = true;
+        }
+
+        if (collision.gameObject.CompareTag("Mother"))
+        {
+            ChatScript.MotherChatController();
+            ChatCanvas.enabled = true;
+            ChatScript.dadChatCount++;
+        }
+
+        if (collision.gameObject.CompareTag("Grandmother"))
+        {
+            ChatScript.GrandmotherChatController();
+            ChatCanvas.enabled = true;
+            ChatScript.dadChatCount++;
         }
 
         if (collision.gameObject.CompareTag("ExitHome"))
         {
-            SceneManager.LoadScene("GameplayScene");
+            SceneManager.LoadScene("TownScene");
         }
 
         if (collision.gameObject.CompareTag("EnterHome"))
