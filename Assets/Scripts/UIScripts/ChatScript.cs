@@ -30,6 +30,10 @@ public class ChatScript : MonoBehaviour
     public Button option1Button;
     public Button option2Button;
 
+    public Collider2D dadCollider;
+    public Collider2D motherCollider;
+    public Collider2D grandmotherCollider;
+
     //dad chat count
     public int dadChatCount = 1;
 
@@ -56,7 +60,6 @@ public class ChatScript : MonoBehaviour
     static ChatBlock block2 = new ChatBlock("I can't handle it. Hurry up, son.", "Anyway, if my mother has it, I'll bring it.", "Let me ask my mother. Wait here.", block0, block0);
     static ChatBlock block1 = new ChatBlock("It hurts, son. I'm wounded but I'm not bleeding. Bring me blood.", "What do you say, dad? What blood?", "Ok dad. Hang on.", block2, block2);
 
-
     private void DisplayBlock(ChatBlock block)
     {
         chatText.text = block.chat;
@@ -65,10 +68,16 @@ public class ChatScript : MonoBehaviour
 
         currentBlock = block;
     }
-    
+
+    private void Start()
+    {
+        dadCollider.enabled = true;
+        motherCollider.enabled = false;
+        grandmotherCollider.enabled = false;
+    }
     public void DadChatController()
     {
-        if(dadChatCount == 1)
+        if (dadChatCount == 1)
         {
             DisplayBlock(block1);
         }

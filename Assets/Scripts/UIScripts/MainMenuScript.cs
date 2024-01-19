@@ -20,7 +20,7 @@ public class MainMenuScript : MonoBehaviour
     #region MainMenuButtons
     public void PlayButton()
     {
-        SceneManager.LoadScene("HomeScene");
+        SceneManager.LoadScene("TownScene");
     }
     
     public void SettingsButton() 

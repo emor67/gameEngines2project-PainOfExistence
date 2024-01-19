@@ -44,20 +44,33 @@ public class PlayerCollisionDetector : MonoBehaviour
         {
             ChatScript.DadChatController();
             ChatCanvas.enabled = true;
+            if (ChatScript.dadChatCount == 1)
+            {
+                ChatScript.motherCollider.enabled = true;
+            }
+            if (ChatScript.dadChatCount == 2)
+            {
+                ChatScript.grandmotherCollider.enabled = true;
+            }
+            ChatScript.dadCollider.enabled = false;
         }
 
         if (collision.gameObject.CompareTag("Mother"))
         {
             ChatScript.MotherChatController();
             ChatCanvas.enabled = true;
-            ChatScript.dadChatCount++;
+            ChatScript.dadChatCount = 2;
+            ChatScript.dadCollider.enabled = true;
+            ChatScript.motherCollider.enabled = false;
         }
 
         if (collision.gameObject.CompareTag("Grandmother"))
         {
             ChatScript.GrandmotherChatController();
             ChatCanvas.enabled = true;
-            ChatScript.dadChatCount++;
+            ChatScript.dadChatCount = 3;
+            ChatScript.grandmotherCollider.enabled = false;
+            ChatScript.dadCollider.enabled = true;
         }
 
         if (collision.gameObject.CompareTag("ExitHome"))
